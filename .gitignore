@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+.claude/
+
+# Runtime cache of live ESPN state — regenerated on first run, not source.
+wc_sim/data/state_cache.json

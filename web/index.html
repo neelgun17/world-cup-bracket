@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>World Cup 2026 — Live Bracket Visualizer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1>World Cup 2026 — Live Bracket</h1>
+      <span id="status" class="status">loading…</span>
+    </div>
+    <div class="controls">
+      <button id="btn-mc">Run probabilities</button>
+      <button id="btn-reset" class="ghost">Reset my picks</button>
+    </div>
+  </header>
+
+  <p class="hint">
+    Standings update from live scores. Edit any score, or click a team in the bracket to send
+    them through — the third-place race, the 495-rule assignments, and the whole bracket
+    recompute instantly. Greyed future games use the favourite (by Elo).
+  </p>
+
+  <section id="groups" class="groups"></section>
+
+  <section class="board">
+    <div id="thirds" class="thirds"></div>
+    <div id="bracket" class="bracket"></div>
+  </section>
+
+  <div id="mc-panel" class="mc-panel hidden"></div>
+  <div id="tooltip" class="tooltip hidden"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

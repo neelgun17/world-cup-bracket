@@ -1,0 +1,338 @@
+[
+  {
+    "group": "A",
+    "name": "Mexico",
+    "abbr": "MEX",
+    "code": "MX",
+    "elo": 1896
+  },
+  {
+    "group": "A",
+    "name": "South Korea",
+    "abbr": "KOR",
+    "code": "KR",
+    "elo": 1771
+  },
+  {
+    "group": "A",
+    "name": "Czechia",
+    "abbr": "CZE",
+    "code": "CZ",
+    "elo": 1696
+  },
+  {
+    "group": "A",
+    "name": "South Africa",
+    "abbr": "RSA",
+    "code": "ZA",
+    "elo": 1527
+  },
+  {
+    "group": "B",
+    "name": "Switzerland",
+    "abbr": "SUI",
+    "code": "CH",
+    "elo": 1885
+  },
+  {
+    "group": "B",
+    "name": "Canada",
+    "abbr": "CAN",
+    "code": "CA",
+    "elo": 1777
+  },
+  {
+    "group": "B",
+    "name": "Bosnia-Herzegovina",
+    "abbr": "BIH",
+    "code": "BA",
+    "elo": 1596
+  },
+  {
+    "group": "B",
+    "name": "Qatar",
+    "abbr": "QAT",
+    "code": "QA",
+    "elo": 1437
+  },
+  {
+    "group": "C",
+    "name": "Brazil",
+    "abbr": "BRA",
+    "code": "BR",
+    "elo": 1986
+  },
+  {
+    "group": "C",
+    "name": "Morocco",
+    "abbr": "MAR",
+    "code": "MA",
+    "elo": 1866
+  },
+  {
+    "group": "C",
+    "name": "Scotland",
+    "abbr": "SCO",
+    "code": "SQ",
+    "elo": 1768
+  },
+  {
+    "group": "C",
+    "name": "Haiti",
+    "abbr": "HAI",
+    "code": "HT",
+    "elo": 1528
+  },
+  {
+    "group": "D",
+    "name": "United States",
+    "abbr": "USA",
+    "code": "US",
+    "elo": 1820
+  },
+  {
+    "group": "D",
+    "name": "Paraguay",
+    "abbr": "PAR",
+    "code": "PY",
+    "elo": 1816
+  },
+  {
+    "group": "D",
+    "name": "Türkiye",
+    "abbr": "TUR",
+    "code": "TR",
+    "elo": 1813
+  },
+  {
+    "group": "D",
+    "name": "Australia",
+    "abbr": "AUS",
+    "code": "AU",
+    "elo": 1799
+  },
+  {
+    "group": "E",
+    "name": "Germany",
+    "abbr": "GER",
+    "code": "DE",
+    "elo": 1954
+  },
+  {
+    "group": "E",
+    "name": "Ecuador",
+    "abbr": "ECU",
+    "code": "EC",
+    "elo": 1864
+  },
+  {
+    "group": "E",
+    "name": "Ivory Coast",
+    "abbr": "CIV",
+    "code": "CI",
+    "elo": 1728
+  },
+  {
+    "group": "E",
+    "name": "Curaçao",
+    "abbr": "CUW",
+    "code": "CW",
+    "elo": 1453
+  },
+  {
+    "group": "F",
+    "name": "Netherlands",
+    "abbr": "NED",
+    "code": "NL",
+    "elo": 1972
+  },
+  {
+    "group": "F",
+    "name": "Japan",
+    "abbr": "JPN",
+    "code": "JP",
+    "elo": 1925
+  },
+  {
+    "group": "F",
+    "name": "Sweden",
+    "abbr": "SWE",
+    "code": "SE",
+    "elo": 1727
+  },
+  {
+    "group": "F",
+    "name": "Tunisia",
+    "abbr": "TUN",
+    "code": "TN",
+    "elo": 1570
+  },
+  {
+    "group": "G",
+    "name": "Belgium",
+    "abbr": "BEL",
+    "code": "BE",
+    "elo": 1869
+  },
+  {
+    "group": "G",
+    "name": "Iran",
+    "abbr": "IRN",
+    "code": "IR",
+    "elo": 1766
+  },
+  {
+    "group": "G",
+    "name": "Egypt",
+    "abbr": "EGY",
+    "code": "EG",
+    "elo": 1740
+  },
+  {
+    "group": "G",
+    "name": "New Zealand",
+    "abbr": "NZL",
+    "code": "NZ",
+    "elo": 1549
+  },
+  {
+    "group": "H",
+    "name": "Spain",
+    "abbr": "ESP",
+    "code": "ES",
+    "elo": 2134
+  },
+  {
+    "group": "H",
+    "name": "Uruguay",
+    "abbr": "URU",
+    "code": "UY",
+    "elo": 1851
+  },
+  {
+    "group": "H",
+    "name": "Cape Verde",
+    "abbr": "CPV",
+    "code": "CV",
+    "elo": 1625
+  },
+  {
+    "group": "H",
+    "name": "Saudi Arabia",
+    "abbr": "KSA",
+    "code": "SA",
+    "elo": 1593
+  },
+  {
+    "group": "I",
+    "name": "France",
+    "abbr": "FRA",
+    "code": "FR",
+    "elo": 2084
+  },
+  {
+    "group": "I",
+    "name": "Norway",
+    "abbr": "NOR",
+    "code": "NO",
+    "elo": 1929
+  },
+  {
+    "group": "I",
+    "name": "Senegal",
+    "abbr": "SEN",
+    "code": "SN",
+    "elo": 1839
+  },
+  {
+    "group": "I",
+    "name": "Iraq",
+    "abbr": "IRQ",
+    "code": "IQ",
+    "elo": 1592
+  },
+  {
+    "group": "J",
+    "name": "Argentina",
+    "abbr": "ARG",
+    "code": "AR",
+    "elo": 2144
+  },
+  {
+    "group": "J",
+    "name": "Austria",
+    "abbr": "AUT",
+    "code": "AT",
+    "elo": 1841
+  },
+  {
+    "group": "J",
+    "name": "Algeria",
+    "abbr": "ALG",
+    "code": "DZ",
+    "elo": 1759
+  },
+  {
+    "group": "J",
+    "name": "Jordan",
+    "abbr": "JOR",
+    "code": "JO",
+    "elo": 1653
+  },
+  {
+    "group": "K",
+    "name": "Colombia",
+    "abbr": "COL",
+    "code": "CO",
+    "elo": 1998
+  },
+  {
+    "group": "K",
+    "name": "Portugal",
+    "abbr": "POR",
+    "code": "PT",
+    "elo": 1967
+  },
+  {
+    "group": "K",
+    "name": "Uzbekistan",
+    "abbr": "UZB",
+    "code": "UZ",
+    "elo": 1698
+  },
+  {
+    "group": "K",
+    "name": "Congo DR",
+    "abbr": "COD",
+    "code": "CD",
+    "elo": 1674
+  },
+  {
+    "group": "L",
+    "name": "England",
+    "abbr": "ENG",
+    "code": "EN",
+    "elo": 2055
+  },
+  {
+    "group": "L",
+    "name": "Croatia",
+    "abbr": "CRO",
+    "code": "HR",
+    "elo": 1881
+  },
+  {
+    "group": "L",
+    "name": "Panama",
+    "abbr": "PAN",
+    "code": "PA",
+    "elo": 1683
+  },
+  {
+    "group": "L",
+    "name": "Ghana",
+    "abbr": "GHA",
+    "code": "GH",
+    "elo": 1557
+  }
+]
