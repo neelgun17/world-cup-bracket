@@ -9,27 +9,60 @@
 <body>
   <header>
     <div class="title">
-      <h1>World Cup 2026 — Live Bracket</h1>
+      <h1>World Cup 2026</h1>
       <span id="status" class="status">loading…</span>
     </div>
+    <nav class="tabs">
+      <a href="#/standings" data-page="standings">Standings</a>
+      <a href="#/bracket" data-page="bracket">Bracket<span id="bracket-dot" class="tab-dot hidden"></span></a>
+      <a href="#/team" data-page="team">My Team</a>
+    </nav>
     <div class="controls">
       <button id="btn-mc">Run probabilities</button>
-      <button id="btn-reset" class="ghost">Reset my picks</button>
+      <button id="btn-reset" class="ghost">Reset picks</button>
     </div>
   </header>
 
-  <p class="hint">
-    Standings update from live scores. Edit any score, or click a team in the bracket to send
-    them through — the third-place race, the 495-rule assignments, and the whole bracket
-    recompute instantly. Greyed future games use the favourite (by Elo).
-  </p>
+  <main>
+    <!-- ===== Standings ===== -->
+    <section id="page-standings" class="page">
+      <p class="hint">
+        Standings update from live scores. Edit any score to see the third-place race and the
+        495-rule cut recompute instantly. Greyed future games use the favourite (by Elo).
+      </p>
+      <div id="bracket-diff" class="bracket-diff hidden"></div>
+      <section id="groups" class="groups"></section>
+      <div class="thirds-page">
+        <div id="thirds" class="thirds"></div>
+      </div>
+    </section>
 
-  <section id="groups" class="groups"></section>
+    <!-- ===== Bracket ===== -->
+    <section id="page-bracket" class="page">
+      <p class="hint">
+        Click a team to send them through — the 495-rule assignments and the whole bracket
+        recompute. Run probabilities to replace each Round-of-32 slot with its most-likely
+        occupant (gold = a real coin-flip). Edits made on the Standings page carry over here.
+      </p>
+      <div id="bracket-note" class="bracket-note hidden"></div>
+      <div id="bracket" class="bracket"></div>
+    </section>
 
-  <section class="board">
-    <div id="thirds" class="thirds"></div>
-    <div id="bracket" class="bracket"></div>
-  </section>
+    <!-- ===== My Team ===== -->
+    <section id="page-team" class="page">
+      <div class="team-head">
+        <div>
+          <h2>What does my team need?</h2>
+          <p class="hint" style="margin:4px 0 0">
+            Pick a team to see its clinch / elimination picture, exactly what each remaining
+            result is worth, and who it would most likely meet in the Round of 32.
+          </p>
+        </div>
+        <select id="team-select" aria-label="Choose a team"></select>
+      </div>
+      <div id="team-report"></div>
+    </section>
+  </main>
 
   <div id="mc-panel" class="mc-panel hidden"></div>
   <div id="tooltip" class="tooltip hidden"></div>

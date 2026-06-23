@@ -110,6 +110,11 @@ def build_board(teams: dict[str, Team], base_matches: list[Match],
         order = {no: i for i, no in enumerate(BRACKET_ORDER[stage])}
         rounds[STAGE_LABEL[stage]].sort(key=lambda nd: order.get(nd["match_no"], 999))
 
+    # "What did my edits change?" — diff the projected Round-of-32 (and final group orders)
+    # against the no-override baseline, so the Standings page can show the bracket ripple in
+    # place. Only computed when the user has actually edited a score (cheap deterministic run).
+    changes = _bracket_changes(teams, base_matches, res) if overrides else None
+
     played = sum(1 for m in matches if m.played)
     live = sum(1 for m in matches if m.live)
     return {
@@ -121,7 +126,71 @@ def build_board(teams: dict[str, Team], base_matches: list[Match],
         "assignment": explain,
         "rounds": rounds,
         "round_order": [STAGE_LABEL[s] for s in STAGE_ORDER],
+        "changes": changes,
     }
+
+
+def _bracket_changes(teams: dict[str, Team], base_matches: list[Match], res) -> dict:
+    """Diff the current (overridden) projection against the clean live projection."""
+    base = Tournament(teams, base_matches).project(
+        model=MatchModel(random.Random(0)), deterministic=True)
+
+    def ab(name):
+        return teams.get(name, _ph(name)).abbr
+
+    r32 = []
+    for no in BRACKET_ORDER[R32]:
+        cur, old = res.knockout[no], base.knockout[no]
+        if (cur.home, cur.away) != (old.home, old.away):
+            r32.append({
+                "match_no": no,
+                "home": cur.home, "away": cur.away, "abbr_home": ab(cur.home), "abbr_away": ab(cur.away),
+                "old_home": old.home, "old_away": old.away,
+                "old_abbr_home": ab(old.home), "old_abbr_away": ab(old.away),
+            })
+
+    groups = []
+    for g in sorted(res.group_orders):
+        cur = [r.team for r in res.group_orders[g][:3]]
+        old = [r.team for r in base.group_orders[g][:3]]
+        if cur != old:
+            groups.append({"group": g, "order": cur, "old": old})
+
+    return {"r32": r32, "groups": groups}
+
+
+def build_team_report(teams: dict[str, Team], base_matches: list[Match], team_name: str,
+                      overrides: dict | None = None, runs: int = 6000) -> dict:
+    """The 'what does my team need?' payload: a conditioned outlook plus the team's current
+    group row and a coarse clinch/eliminated status (probabilistic — exact clinching also
+    depends on other groups via the best-thirds cut, so we read it off the simulation)."""
+    overrides = overrides or {}
+    matches = apply_group_overrides(base_matches, overrides)
+    t = Tournament(teams, matches)
+    out = t.team_outlook(team_name, runs=runs)
+
+    g = teams[team_name].group
+    table = t.standings()[g]
+    pos = next(i for i, r in enumerate(table, 1) if r.team == team_name)
+    rec = table[pos - 1]
+    out["current"] = {
+        "pos": pos, "P": rec.played, "W": rec.won, "D": rec.drawn, "L": rec.lost,
+        "GD": rec.gd, "Pts": rec.points,
+    }
+    out["abbr"] = teams[team_name].abbr
+    out["games_left"] = len(out["remaining"])
+
+    p = out["p_advance"]
+    if p >= 99.9:
+        status = "qualified"
+    elif p <= 0.1:
+        status = "eliminated"
+    elif not out["remaining"]:
+        status = "waiting"           # own games done; fate hangs on other groups (thirds cut)
+    else:
+        status = "alive"
+    out["status"] = status
+    return out
 
 
 @dataclass

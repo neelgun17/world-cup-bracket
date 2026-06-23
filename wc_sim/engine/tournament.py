@@ -231,6 +231,98 @@ class Tournament:
             },
         }
 
+    # ---- single-team outlook ("what does my team need?") ------------------------
+    def team_outlook(self, team_name: str, runs: int = 6000, seed: int = 0) -> dict:
+        """Conditioned Monte-Carlo for one team. Runs the group stage `runs` times and,
+        rather than forcing results, *slices* the same sims by the team's outcome in each of
+        its remaining group games. That yields P(advance), the finish-position spread, the
+        marginal Round-of-32 opponent distribution, and — per remaining match — P(advance |
+        win / draw / loss). One run answers "what do I need?" honestly, with the 495 chaos
+        baked in (third-place qualifiers get assigned opponents via the real table)."""
+        from collections import Counter
+
+        if team_name not in self.teams:
+            raise KeyError(team_name)
+        rng = random.Random(seed)
+        model = MatchModel(rng)
+        g = self.teams[team_name].group
+
+        # The team's own remaining (not-yet-final) group games, with which side it is on.
+        remaining = [(m, m.home == team_name) for m in self.by_group.get(g, [])
+                     if (m.home == team_name or m.away == team_name) and not m.played]
+        rem_meta = {m.id: (m, is_home) for m, is_home in remaining}
+
+        advanced = group_win = qual_third = 0
+        finish = Counter()                  # final group position 1..4
+        opp = Counter()                     # R32 opponent when the team advances
+        # per remaining match: outcome -> [times it happened, times the team then advanced]
+        OUTCOMES = ("win", "draw", "loss")
+        cond = {mid: {o: [0, 0] for o in OUTCOMES} for mid in rem_meta}
+
+        for _ in range(runs):
+            scores = self._fill_group_scores(model, deterministic=False)
+            orders = self._orders_from_scores(scores)
+            winners = {gg: recs[0].team for gg, recs in orders.items()}
+            runners = {gg: recs[1].team for gg, recs in orders.items()}
+            third_of = {gg: recs[2].team for gg, recs in orders.items()}
+            ranked = rank_third_placed([recs[2] for recs in orders.values()])
+            qualified_groups = sorted(r.group for r in ranked[:8])
+            assignment = assign_thirds(qualified_groups)
+            r32 = resolve_r32(winners, runners, assignment, third_of)
+
+            pos = next(i for i, r in enumerate(orders[g], 1) if r.team == team_name)
+            finish[pos] += 1
+            if pos == 1:
+                group_win += 1
+            is_qual_third = pos == 3 and g in qualified_groups
+            if is_qual_third:
+                qual_third += 1
+            adv = pos in (1, 2) or is_qual_third
+            if adv:
+                advanced += 1
+                for m in r32:               # the team's R32 pairing is fixed once positions are set
+                    if m.home == team_name:
+                        opp[m.away] += 1
+                        break
+                    if m.away == team_name:
+                        opp[m.home] += 1
+                        break
+
+            for mid, (m, is_home) in rem_meta.items():
+                sh, sa = scores[mid]
+                tf, of = (sh, sa) if is_home else (sa, sh)
+                outcome = "win" if tf > of else "draw" if tf == of else "loss"
+                cond[mid][outcome][0] += 1
+                if adv:
+                    cond[mid][outcome][1] += 1
+
+        def pct(c, total=runs):
+            return round(100.0 * c / total, 1) if total else 0.0
+
+        remaining_payload = []
+        for m, is_home in remaining:
+            other = m.away if is_home else m.home
+            outs = {}
+            for o in OUTCOMES:
+                n, a = cond[m.id][o]
+                outs[o] = {"p": pct(n), "p_advance": round(100.0 * a / n, 1) if n else None}
+            remaining_payload.append({
+                "id": m.id, "opponent": other,
+                "abbr_opponent": self.teams.get(other).abbr if other in self.teams else other[:3].upper(),
+                "home": is_home, "outcomes": outs,
+            })
+
+        return {
+            "team": team_name, "group": g, "elo": round(self.elo[team_name]), "runs": runs,
+            "p_advance": pct(advanced),
+            "p_group_win": pct(group_win),
+            "p_third_qualify": pct(qual_third),
+            "finish": {str(p): pct(finish[p]) for p in (1, 2, 3, 4)},
+            "remaining": remaining_payload,
+            "opponents": [{"team": t, "abbr": self.teams[t].abbr, "pct": pct(c, advanced)}
+                          for t, c in opp.most_common(8)],
+        }
+
     def _tally_advancement(self, res: ProjectionResult, reach: dict):
         ko = res.knockout
         # winners of each round have "reached" the next round

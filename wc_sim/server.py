@@ -13,7 +13,7 @@ import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from .api import apply_group_overrides, build_board
+from .api import apply_group_overrides, build_board, build_team_report
 from .engine import Tournament
 from .ingest import cache_state, fetch_group_matches, load_cached, load_teams
 
@@ -75,6 +75,16 @@ class Handler(BaseHTTPRequestHandler):
             matches = apply_group_overrides(BASE, overrides)
             t = Tournament(TEAMS, matches)
             return self._send(200, json.dumps(t.monte_carlo(runs=runs, seed=1)))
+        if self.path == "/api/team":
+            team = body.get("team")
+            if team not in TEAMS:
+                return self._send(400, json.dumps({"error": "unknown team"}))
+            try:
+                runs = int(body.get("runs", 6000))
+            except (TypeError, ValueError):
+                runs = 6000
+            runs = max(500, min(runs, 20000))   # keep a single request bounded
+            return self._send(200, json.dumps(build_team_report(TEAMS, BASE, team, overrides, runs)))
         return self._send(404, "not found", "text/plain")
 
 
