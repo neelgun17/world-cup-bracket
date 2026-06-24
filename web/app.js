@@ -103,6 +103,7 @@ async function fetchBoard() {
 }
 
 function render() {
+  renderSnapshotBanner();
   renderStatus();
   renderGroups();
   renderThirds();
@@ -155,6 +156,27 @@ function mcChampion() {
     if (d && (best === null || d.champion > best.pct)) best = { team, pct: d.champion };
   }
   return best && best.pct > 0 ? best : null;
+}
+
+// A shared ?s= link is a frozen snapshot, not the live tournament. Make that explicit so a
+// viewer doesn't read stale scores as live, and give them a one-click way back to the live state.
+function renderSnapshotBanner() {
+  const b = $("#snapshot-banner");
+  if (!b) return;
+  if (!state.snapshot) { b.classList.add("hidden"); b.innerHTML = ""; return; }
+  b.classList.remove("hidden");
+  b.innerHTML = `<span class="snap-pin">📌</span>
+    <span class="snap-txt">You're viewing a <b>shared snapshot</b> — frozen when it was shared, not the live tournament.</span>
+    <a href="#" class="snap-live" id="to-live">Switch to live →</a>`;
+  $("#to-live").addEventListener("click", (e) => { e.preventDefault(); goLive(); });
+}
+
+// Return to the live tournament: drop the frozen snapshot and any edits/picks (keeps the team).
+function goLive() {
+  state.snapshot = null; state.overrides = {}; state.ko_overrides = {};
+  mcByTeam = null; mcSlots = null; teamReport = null;
+  saveState();
+  fetchBoard();
 }
 
 function renderStatus() {
@@ -913,13 +935,7 @@ function saveImage() {
 $("#btn-mc").addEventListener("click", () => loadProbabilities(true));
 $("#btn-share").addEventListener("click", shareLink);
 $("#btn-image").addEventListener("click", saveImage);
-$("#btn-reset").addEventListener("click", () => {
-  // Reset returns to the live tournament: drop edits, picks, and any frozen-link snapshot.
-  state.overrides = {}; state.ko_overrides = {}; state.snapshot = null;
-  mcByTeam = null; mcSlots = null; teamReport = null;
-  saveState();
-  fetchBoard();
-});
+$("#btn-reset").addEventListener("click", goLive);  // drop edits, picks, and any frozen snapshot
 $("#team-select").addEventListener("change", (e) => {
   state.team = e.target.value || null;
   teamReport = null;
