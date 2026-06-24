@@ -335,7 +335,10 @@ function renderSlot(n, side, label) {
 
   const score = n.score ? n.score[side === "home" ? 0 : 1] : "";
   const isWinner = !gold && n.winner === team;
-  const slot = el("div", "slot" + (isWinner ? " winner" : "") + (n.picked && isWinner ? " picked" : "") + (gold ? " marginal" : ""));
+  // A manually-picked team is the winner you clicked through — flag it even on a gold
+  // (coin-flip) slot, so a pick is never mistaken for the model's own projection.
+  const isPicked = n.picked && n.winner === team;
+  const slot = el("div", "slot" + (isWinner ? " winner" : "") + (isPicked ? " picked" : "") + (gold ? " marginal" : ""));
 
   let why = isThirdAway ? n.third_slot.why : null;
   if (dist && dist.length > 1) {
@@ -344,8 +347,9 @@ function renderSlot(n, side, label) {
     why = `${head}: ${top5}.` + (isThirdAway ? `\n\n${n.third_slot.why}` : "");
   }
   const info = why ? `<span class="info" data-why="${encodeURIComponent(why)}">ⓘ</span>` : "";
+  const flag = isPicked ? `<span class="pickflag" title="You picked this team through (not the model's projection)">pick</span>` : "";
   slot.innerHTML = `<span class="abbr">${abbr}</span><span class="nm">${team}${info}</span>
-    <span class="pct">${pct != null ? pct + "%" : ""}</span><span class="sc">${score}</span>`;
+    ${flag}<span class="pct">${pct != null ? pct + "%" : ""}</span><span class="sc">${score}</span>`;
   if (pct != null) {
     const bar = el("span", "bar"); bar.style.width = Math.min(100, pct) + "%"; slot.appendChild(bar);
   }

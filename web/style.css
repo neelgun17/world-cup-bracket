@@ -124,12 +124,20 @@ svg.connectors { position: absolute; top: 0; left: 0; z-index: 0; pointer-events
 .slot .sc { color: var(--dim); font-variant-numeric: tabular-nums; }
 .slot.winner { border-left-color: var(--accent); }
 .slot.winner .nm, .slot.winner .abbr { color: var(--txt); }
-.slot.picked { background: rgba(88,166,255,.12); }
 .slot .bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--accent2); opacity: .5; }
 .slot .info { color: var(--gold); font-size: 11px; cursor: help; }
 .slot .pct { color: var(--accent2); font-size: 11px; min-width: 30px; text-align: right; }
 .slot.marginal { border-left: 3px dashed var(--gold); }
 .slot.marginal .nm { color: var(--gold); font-style: italic; }
+/* A manual pick (you clicked this team through) — blue, so it never reads as the model's
+   own green projection. The PICK badge spells it out; the border wins over winner/marginal. */
+.slot.picked { background: rgba(88,166,255,.16); }
+.slot.picked, .slot.picked.winner, .slot.picked.marginal { border-left: 3px solid var(--accent2); }
+.slot.picked .nm { color: var(--txt); font-style: normal; }
+.slot .pickflag {
+  flex: none; font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--accent2); border: 1px solid var(--accent2); border-radius: 3px; padding: 0 3px;
+}
 .champion-banner { padding: 10px; text-align: center; background: linear-gradient(90deg, #3a2f06, #5a4708); border-radius: 8px; font-weight: 700; color: var(--gold); }
 .champion-banner .cb-sub { display: block; font-size: 10.5px; font-weight: 500; color: #c9a23a; opacity: .8; margin-top: 2px; letter-spacing: .3px; }
 .mc-champ { margin-top: 8px; padding: 8px 10px; border-radius: 8px; font-size: 12.5px; text-align: center; color: var(--dim); border: 1px solid var(--line); }

@@ -52,11 +52,14 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, path.read_bytes(), ctype)
 
     def do_GET(self):
-        if self.path in ("/", "/index.html"):
+        # Strip the query string before routing so a shared "?s=…" link still serves the SPA
+        # (the browser keeps the token; the server just needs to hand back index.html).
+        path = self.path.split("?", 1)[0]
+        if path in ("/", "/index.html"):
             return self._static("index.html")
-        if self.path.startswith("/static/"):
-            return self._static(self.path[len("/static/"):])
-        if self.path == "/api/board":
+        if path.startswith("/static/"):
+            return self._static(path[len("/static/"):])
+        if path == "/api/board":
             return self._send(200, json.dumps(build_board(TEAMS, BASE)))
         return self._send(404, "not found", "text/plain")
 
