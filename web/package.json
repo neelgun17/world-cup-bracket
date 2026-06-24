@@ -1,0 +1,19 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "World Cup 2026 Bracket Frontend with Vercel Analytics",
+  "main": "app.js",
+  "scripts": {
+    "build": "esbuild analytics.js --bundle --outfile=analytics.bundle.js --format=iife --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  }
+}
