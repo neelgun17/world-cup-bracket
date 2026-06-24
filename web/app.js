@@ -288,7 +288,8 @@ function renderBracket() {
     const nodes = board.rounds[label] || [];
     if (!nodes.length) return;
     const col = el("div", "round main");
-    col.appendChild(el("h4", null, label + (mcByTeam ? " · % to reach" : "")));
+    col.appendChild(el("h4", null,
+      label + (mcByTeam ? (label === "Final" ? " · % to win" : " · % to reach") : "")));
     const ties = el("div", "ties");
     for (const n of nodes) ties.appendChild(renderTie(n, label));
     col.appendChild(ties);
@@ -342,8 +343,11 @@ function renderTie(n, label) {
 function slotPct(n, side, team, label) {
   if (mcByTeam) {
     const t = mcByTeam[team];
-    const k = STAGE_KEY[label];
-    return t && k != null && t[k] != null ? Math.round(t[k]) : null;
+    if (!t) return null;
+    // The Final column is the trophy: show each finalist's chance to WIN the cup (so it matches
+    // the header), not just to reach the final. Every earlier column is "% to reach that round".
+    const k = label === "Final" ? "champion" : STAGE_KEY[label];
+    return k != null && t[k] != null ? Math.round(t[k]) : null;
   }
   return side === "home" && n.p_home != null ? Math.round(n.p_home * 100) : null;
 }
@@ -653,6 +657,8 @@ function renderSimStatus() {
     `How to read the bracket\n\n` +
     `• Each % on a team is its chance to REACH that round, measured across 5,000 simulated ` +
     `tournaments (not a single-game win chance).\n\n` +
+    `• The Final column is the exception: it shows each finalist's chance to WIN the cup, so a ` +
+    `team can show a higher % to reach the final than to win it (and it matches the header).\n\n` +
     `• Gold, italic slots are genuine coin-flips — the most-likely team there is under 55%, or ` +
     `it's a chaotic third-place slot whose opponent swings on the 495-rule table.\n\n` +
     `• In the Probabilities panel: "Final" = chance to reach the final, "Win" = chance to win it all.\n\n` +
