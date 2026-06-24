@@ -181,9 +181,14 @@ class Tournament:
         return ko
 
     # ---- Monte Carlo ------------------------------------------------------------
-    def monte_carlo(self, runs: int = 10000, seed: int = 0) -> dict:
+    def monte_carlo(self, runs: int = 10000, seed: int = 0,
+                    ko_overrides: dict[int, str] | None = None) -> dict:
+        """Run the tournament `runs` times. `ko_overrides` (match_no -> forced team) conditions
+        every run on the user's knockout pick-ems: in each sim the forced team is sent through
+        any match it actually reaches, and plays normally in sims where it doesn't reach it."""
         from collections import Counter
 
+        ko_overrides = {int(k): v for k, v in (ko_overrides or {}).items()}
         rng = random.Random(seed)
         model = MatchModel(rng)
         names = list(self.teams)
@@ -196,7 +201,7 @@ class Tournament:
         slot_away = {no: Counter() for no in R32_SLOTS}
 
         for _ in range(runs):
-            res = self.project(model, deterministic=False, rng=rng)
+            res = self.project(model, deterministic=False, rng=rng, ko_overrides=ko_overrides)
             for g, recs in res.group_orders.items():
                 group_winner[recs[0].team] += 1
             for no in R32_SLOTS:

@@ -1,0 +1,3 @@
+# The rules engine (wc_sim) is pure standard library. Pillow is used ONLY by the
+# serverless function to render the Open Graph link-preview card at /api/og.
+Pillow>=10.1

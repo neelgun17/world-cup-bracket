@@ -1,0 +1,779 @@
+[
+  {
+    "id": "760415",
+    "group": "A",
+    "home": "Mexico",
+    "away": "South Africa",
+    "score": [
+      2,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760414",
+    "group": "A",
+    "home": "South Korea",
+    "away": "Czechia",
+    "score": [
+      2,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760416",
+    "group": "B",
+    "home": "Canada",
+    "away": "Bosnia-Herzegovina",
+    "score": [
+      1,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760417",
+    "group": "D",
+    "home": "United States",
+    "away": "Paraguay",
+    "score": [
+      4,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760420",
+    "group": "B",
+    "home": "Qatar",
+    "away": "Switzerland",
+    "score": [
+      1,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760419",
+    "group": "C",
+    "home": "Brazil",
+    "away": "Morocco",
+    "score": [
+      1,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760418",
+    "group": "C",
+    "home": "Haiti",
+    "away": "Scotland",
+    "score": [
+      0,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760421",
+    "group": "D",
+    "home": "Australia",
+    "away": "T\u00fcrkiye",
+    "score": [
+      2,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760422",
+    "group": "E",
+    "home": "Germany",
+    "away": "Cura\u00e7ao",
+    "score": [
+      7,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760425",
+    "group": "F",
+    "home": "Netherlands",
+    "away": "Japan",
+    "score": [
+      2,
+      2
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760423",
+    "group": "E",
+    "home": "Ivory Coast",
+    "away": "Ecuador",
+    "score": [
+      1,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760424",
+    "group": "F",
+    "home": "Sweden",
+    "away": "Tunisia",
+    "score": [
+      5,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760428",
+    "group": "H",
+    "home": "Spain",
+    "away": "Cape Verde",
+    "score": [
+      0,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760426",
+    "group": "G",
+    "home": "Belgium",
+    "away": "Egypt",
+    "score": [
+      1,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760429",
+    "group": "H",
+    "home": "Saudi Arabia",
+    "away": "Uruguay",
+    "score": [
+      1,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760427",
+    "group": "G",
+    "home": "Iran",
+    "away": "New Zealand",
+    "score": [
+      2,
+      2
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760432",
+    "group": "I",
+    "home": "France",
+    "away": "Senegal",
+    "score": [
+      3,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760430",
+    "group": "I",
+    "home": "Iraq",
+    "away": "Norway",
+    "score": [
+      1,
+      4
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760433",
+    "group": "J",
+    "home": "Argentina",
+    "away": "Algeria",
+    "score": [
+      3,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760431",
+    "group": "J",
+    "home": "Austria",
+    "away": "Jordan",
+    "score": [
+      3,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760435",
+    "group": "K",
+    "home": "Portugal",
+    "away": "Congo DR",
+    "score": [
+      1,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760437",
+    "group": "L",
+    "home": "England",
+    "away": "Croatia",
+    "score": [
+      4,
+      2
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760434",
+    "group": "L",
+    "home": "Ghana",
+    "away": "Panama",
+    "score": [
+      1,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760436",
+    "group": "K",
+    "home": "Uzbekistan",
+    "away": "Colombia",
+    "score": [
+      1,
+      3
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760438",
+    "group": "A",
+    "home": "Czechia",
+    "away": "South Africa",
+    "score": [
+      1,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760439",
+    "group": "B",
+    "home": "Switzerland",
+    "away": "Bosnia-Herzegovina",
+    "score": [
+      4,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760440",
+    "group": "B",
+    "home": "Canada",
+    "away": "Qatar",
+    "score": [
+      6,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760441",
+    "group": "A",
+    "home": "Mexico",
+    "away": "South Korea",
+    "score": [
+      1,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760442",
+    "group": "D",
+    "home": "United States",
+    "away": "Australia",
+    "score": [
+      2,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760445",
+    "group": "C",
+    "home": "Scotland",
+    "away": "Morocco",
+    "score": [
+      0,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760444",
+    "group": "C",
+    "home": "Brazil",
+    "away": "Haiti",
+    "score": [
+      3,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760443",
+    "group": "D",
+    "home": "T\u00fcrkiye",
+    "away": "Paraguay",
+    "score": [
+      0,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760447",
+    "group": "F",
+    "home": "Netherlands",
+    "away": "Sweden",
+    "score": [
+      5,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760448",
+    "group": "E",
+    "home": "Germany",
+    "away": "Ivory Coast",
+    "score": [
+      2,
+      1
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760446",
+    "group": "E",
+    "home": "Ecuador",
+    "away": "Cura\u00e7ao",
+    "score": [
+      0,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760449",
+    "group": "F",
+    "home": "Tunisia",
+    "away": "Japan",
+    "score": [
+      0,
+      4
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760453",
+    "group": "H",
+    "home": "Spain",
+    "away": "Saudi Arabia",
+    "score": [
+      4,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760451",
+    "group": "G",
+    "home": "Belgium",
+    "away": "Iran",
+    "score": [
+      0,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760450",
+    "group": "H",
+    "home": "Uruguay",
+    "away": "Cape Verde",
+    "score": [
+      2,
+      2
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760452",
+    "group": "G",
+    "home": "New Zealand",
+    "away": "Egypt",
+    "score": [
+      1,
+      3
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760456",
+    "group": "J",
+    "home": "Argentina",
+    "away": "Austria",
+    "score": [
+      2,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760457",
+    "group": "I",
+    "home": "France",
+    "away": "Iraq",
+    "score": [
+      3,
+      0
+    ],
+    "status": "final",
+    "minute": null
+  },
+  {
+    "id": "760454",
+    "group": "I",
+    "home": "Norway",
+    "away": "Senegal",
+    "score": [
+      1,
+      0
+    ],
+    "status": "in_progress",
+    "minute": 48
+  },
+  {
+    "id": "760455",
+    "group": "J",
+    "home": "Jordan",
+    "away": "Algeria",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760461",
+    "group": "K",
+    "home": "Portugal",
+    "away": "Uzbekistan",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760458",
+    "group": "L",
+    "home": "England",
+    "away": "Ghana",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760460",
+    "group": "L",
+    "home": "Panama",
+    "away": "Croatia",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760459",
+    "group": "K",
+    "home": "Colombia",
+    "away": "Congo DR",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760462",
+    "group": "B",
+    "home": "Bosnia-Herzegovina",
+    "away": "Qatar",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760463",
+    "group": "B",
+    "home": "Switzerland",
+    "away": "Canada",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760464",
+    "group": "C",
+    "home": "Morocco",
+    "away": "Haiti",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760465",
+    "group": "C",
+    "home": "Scotland",
+    "away": "Brazil",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760467",
+    "group": "A",
+    "home": "Czechia",
+    "away": "Mexico",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760466",
+    "group": "A",
+    "home": "South Africa",
+    "away": "South Korea",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760473",
+    "group": "E",
+    "home": "Cura\u00e7ao",
+    "away": "Ivory Coast",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760468",
+    "group": "E",
+    "home": "Ecuador",
+    "away": "Germany",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760471",
+    "group": "F",
+    "home": "Japan",
+    "away": "Sweden",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760472",
+    "group": "F",
+    "home": "Tunisia",
+    "away": "Netherlands",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760469",
+    "group": "D",
+    "home": "Paraguay",
+    "away": "Australia",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760470",
+    "group": "D",
+    "home": "T\u00fcrkiye",
+    "away": "United States",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760475",
+    "group": "I",
+    "home": "Norway",
+    "away": "France",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760474",
+    "group": "I",
+    "home": "Senegal",
+    "away": "Iraq",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760478",
+    "group": "H",
+    "home": "Cape Verde",
+    "away": "Saudi Arabia",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760479",
+    "group": "H",
+    "home": "Uruguay",
+    "away": "Spain",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760476",
+    "group": "G",
+    "home": "Egypt",
+    "away": "Iran",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760477",
+    "group": "G",
+    "home": "New Zealand",
+    "away": "Belgium",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760480",
+    "group": "L",
+    "home": "Croatia",
+    "away": "Ghana",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760485",
+    "group": "L",
+    "home": "Panama",
+    "away": "England",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760481",
+    "group": "K",
+    "home": "Colombia",
+    "away": "Portugal",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760482",
+    "group": "K",
+    "home": "Congo DR",
+    "away": "Uzbekistan",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760484",
+    "group": "J",
+    "home": "Algeria",
+    "away": "Austria",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  },
+  {
+    "id": "760483",
+    "group": "J",
+    "home": "Jordan",
+    "away": "Argentina",
+    "score": null,
+    "status": "scheduled",
+    "minute": null
+  }
+]

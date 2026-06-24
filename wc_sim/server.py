@@ -61,31 +61,44 @@ class Handler(BaseHTTPRequestHandler):
         return self._send(404, "not found", "text/plain")
 
     def _body(self):
-        n = int(self.headers.get("Content-Length", 0))
+        n = int(self.headers.get("Content-Length", 0) or 0)
         return json.loads(self.rfile.read(n) or b"{}") if n else {}
 
+    @staticmethod
+    def _runs(body, default):
+        """Parse a requested `runs` count, bounded so a single request can't hang the server
+        (mirrors the serverless handler). Non-numeric -> default."""
+        try:
+            runs = int(body.get("runs", default))
+        except (TypeError, ValueError):
+            runs = default
+        return max(500, min(runs, 20000))
+
     def do_POST(self):
-        body = self._body()
+        # Any malformed body / engine error becomes a clean 500 rather than a dropped
+        # connection (matches api/index.py so the dev server behaves like production).
+        try:
+            body = self._body()
+            code, payload = self._route(body)
+        except Exception as e:  # noqa: BLE001
+            code, payload = 500, {"error": str(e)}
+        self._send(code, json.dumps(payload))
+
+    def _route(self, body):
         overrides = body.get("overrides", {})
         ko = body.get("ko_overrides", {})
         if self.path == "/api/board":
-            return self._send(200, json.dumps(build_board(TEAMS, BASE, overrides, ko)))
+            return 200, build_board(TEAMS, BASE, overrides, ko)
         if self.path == "/api/montecarlo":
-            runs = int(body.get("runs", 5000))
             matches = apply_group_overrides(BASE, overrides)
             t = Tournament(TEAMS, matches)
-            return self._send(200, json.dumps(t.monte_carlo(runs=runs, seed=1)))
+            return 200, t.monte_carlo(runs=self._runs(body, 5000), seed=1, ko_overrides=ko)
         if self.path == "/api/team":
             team = body.get("team")
             if team not in TEAMS:
-                return self._send(400, json.dumps({"error": "unknown team"}))
-            try:
-                runs = int(body.get("runs", 6000))
-            except (TypeError, ValueError):
-                runs = 6000
-            runs = max(500, min(runs, 20000))   # keep a single request bounded
-            return self._send(200, json.dumps(build_team_report(TEAMS, BASE, team, overrides, runs)))
-        return self._send(404, "not found", "text/plain")
+                return 400, {"error": "unknown team"}
+            return 200, build_team_report(TEAMS, BASE, team, overrides, self._runs(body, 6000))
+        return 404, {"error": "not found"}
 
 
 def main():

@@ -94,8 +94,15 @@ tr.win, tr.runner { background: rgba(63,185,80,.05); }
 .cutline { border-top: 2px dashed var(--third-out); margin: 6px 2px; text-align: center; color: var(--third-out); font-size: 10px; }
 
 /* ---- bracket ---- */
-.bracket-note { margin: 0 22px 4px; padding: 7px 12px; font-size: 12.5px; color: var(--gold);
-  background: rgba(227,179,65,.1); border: 1px solid rgba(227,179,65,.3); border-radius: 7px; display: inline-block; }
+.legend { display: flex; align-items: center; gap: 9px; margin: 0 22px 8px; padding: 7px 12px;
+  font-size: 12.5px; color: var(--dim); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+.legend.hidden { display: none; }
+.legend b { color: var(--txt); font-weight: 600; }
+.legend .info { color: var(--gold); cursor: help; margin-left: auto; font-size: 13px; }
+.legend .lg-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; }
+.legend.running { color: var(--accent2); border-color: rgba(88,166,255,.4); background: rgba(88,166,255,.07); }
+.legend.running .lg-dot { background: var(--accent2); animation: sim-pulse 1s ease-in-out infinite; }
+@keyframes sim-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .25; transform: scale(.6); } }
 .bracket { position: relative; display: flex; gap: 30px; overflow-x: auto; padding: 6px 22px 40px; min-height: 640px; }
 svg.connectors { position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none; overflow: visible; }
 .conn { fill: none; stroke: var(--line); stroke-width: 1.5; }
@@ -124,6 +131,12 @@ svg.connectors { position: absolute; top: 0; left: 0; z-index: 0; pointer-events
 .slot.marginal { border-left: 3px dashed var(--gold); }
 .slot.marginal .nm { color: var(--gold); font-style: italic; }
 .champion-banner { padding: 10px; text-align: center; background: linear-gradient(90deg, #3a2f06, #5a4708); border-radius: 8px; font-weight: 700; color: var(--gold); }
+.champion-banner .cb-sub { display: block; font-size: 10.5px; font-weight: 500; color: #c9a23a; opacity: .8; margin-top: 2px; letter-spacing: .3px; }
+.mc-champ { margin-top: 8px; padding: 8px 10px; border-radius: 8px; font-size: 12.5px; text-align: center; color: var(--dim); border: 1px solid var(--line); }
+.mc-champ b { color: var(--txt); }
+.mc-champ.diff { color: var(--gold); border-color: rgba(227,179,65,.4); background: rgba(227,179,65,.07); }
+.mc-champ.diff b { color: var(--gold); }
+.mc-champ .info { cursor: help; color: var(--gold); }
 
 /* ---- monte carlo panel ---- */
 .mc-panel {
@@ -143,6 +156,13 @@ svg.connectors { position: absolute; top: 0; left: 0; z-index: 0; pointer-events
   color: var(--txt); padding: 9px 11px; border-radius: 8px; font-size: 12px; z-index: 40;
   pointer-events: none; box-shadow: 0 8px 24px rgba(0,0,0,.5);
 }
+.toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+  background: #0b1117; color: var(--txt); border: 1px solid var(--gold);
+  padding: 11px 18px; border-radius: 10px; font-size: 13px; z-index: 50;
+  box-shadow: 0 10px 30px rgba(0,0,0,.55); max-width: 90vw; text-align: center;
+}
+.toast.hidden { display: none; }
 /* ================= My Team page ================= */
 .team-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding: 16px 22px 6px; flex-wrap: wrap; }
 .team-head h2 { margin: 0; font-size: 18px; }

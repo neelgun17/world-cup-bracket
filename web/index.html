@@ -4,6 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>World Cup 2026 — Live Bracket Visualizer</title>
+  <meta name="description" content="The confusing 2026 World Cup bracket, resolved to real teams and explained live — including the 495-rule third-place assignment." />
+  <!-- Per-bracket Open Graph tags are injected here by the server for shared ?s= links. -->
+  <!--OG-->
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
@@ -19,6 +22,8 @@
     </nav>
     <div class="controls">
       <button id="btn-mc">Run probabilities</button>
+      <button id="btn-share">Share</button>
+      <button id="btn-image" class="ghost">Save image</button>
       <button id="btn-reset" class="ghost">Reset picks</button>
     </div>
   </header>
@@ -44,7 +49,7 @@
         recompute. Run probabilities to replace each Round-of-32 slot with its most-likely
         occupant (gold = a real coin-flip). Edits made on the Standings page carry over here.
       </p>
-      <div id="bracket-note" class="bracket-note hidden"></div>
+      <div id="bracket-legend" class="legend hidden"></div>
       <div id="bracket" class="bracket"></div>
     </section>
 
@@ -66,6 +71,7 @@
 
   <div id="mc-panel" class="mc-panel hidden"></div>
   <div id="tooltip" class="tooltip hidden"></div>
+  <div id="toast" class="toast hidden"></div>
 
   <script src="/static/app.js"></script>
 </body>

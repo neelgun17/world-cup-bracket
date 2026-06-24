@@ -36,12 +36,14 @@ def apply_group_overrides(base: list[Match], overrides: dict) -> list[Match]:
     return out
 
 
-def _table_rows(recs, third_qual_groups: set[str]) -> list[dict]:
+def _table_rows(recs, third_qual_teams: set[str]) -> list[dict]:
     rows = []
     for i, r in enumerate(recs, 1):
         tag = POS_TAG.get(i, "out")
         if i == 3:
-            tag = "third_in" if r.group in third_qual_groups else "third_out"
+            # Tag the team actually shown in this row by ITS current best-thirds standing, so the
+            # in/out colour always matches the team it's on (the projected race is the panel below).
+            tag = "third_in" if r.team in third_qual_teams else "third_out"
         rows.append({
             "pos": i, "team": r.team, "P": r.played, "W": r.won, "D": r.drawn, "L": r.lost,
             "GF": r.gf, "GA": r.ga, "GD": r.gd, "Pts": r.points, "tag": tag,
@@ -60,7 +62,9 @@ def build_board(teams: dict[str, Team], base_matches: list[Match],
     standings = t.standings()
     # Projection gives the final group orders + 8 qualifying thirds + resolved bracket.
     res = t.project(model=model, deterministic=True, ko_overrides=ko_overrides)
-    qual_groups = set(res.qualified_groups)
+    # Current best-thirds snapshot drives the live table's in/out tag (which team is on the row);
+    # the projected ranking drives the third-place race panel ("what the bracket will look like").
+    cur_qual_thirds = set(t.third_place_snapshot()["qualified"])
 
     groups_payload = []
     for g in sorted(standings):
@@ -68,7 +72,7 @@ def build_board(teams: dict[str, Team], base_matches: list[Match],
         gmatches = [m for m in matches if m.group == g]
         groups_payload.append({
             "group": g,
-            "table": _table_rows(recs, qual_groups),
+            "table": _table_rows(recs, cur_qual_thirds),
             "matches": [{
                 "id": m.id, "home": m.home, "away": m.away, "abbr_home": teams[m.home].abbr,
                 "abbr_away": teams[m.away].abbr,

@@ -34,7 +34,7 @@ def load_teams() -> dict[str, Team]:
     }
 
 
-def _http_json(url: str, timeout: float = 20.0) -> dict:
+def _http_json(url: str, timeout: float = 8.0) -> dict:
     req = urllib.request.Request(url, headers={"User-Agent": "wc-bracket-sim/1.0"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.loads(r.read().decode())
