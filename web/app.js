@@ -720,9 +720,40 @@ async function loadProbabilities(showPanel) {
 // the exact what-if), and the bracket can be exported as a clean PNG for group chats.
 
 // A shared link is a STATIC snapshot: it freezes every group result currently shown (live +
-// your edits) so the bracket reproduces exactly, even after newer real results land. Packed
-// into a base64url token: f = frozen flag, o = {matchId:[h,a]} the full group snapshot,
-// k = knockout picks {matchNo:team}, t = the chosen "My Team".
+// your edits) so the bracket reproduces exactly, even after newer real results land.
+//
+// The snapshot dominates the token size, so it's packed compactly (v2): match IDs share a
+// long common prefix (stored once) + a uniform-length suffix, and each game is suffix + two
+// base-36 score chars — no JSON quoting per game. This keeps the URL short enough that link
+// scrapers (e.g. iMessage) don't truncate it and render a wrong, no-picks preview card.
+// Token fields: v=2, p=id prefix, n=suffix length, g=packed games, k=knockout picks, t=team.
+function b36(x) { return Math.min(35, Math.max(0, x | 0)).toString(36); }
+
+function packSnapshot(o) {
+  const ids = Object.keys(o).sort();
+  if (!ids.length) return null;
+  let p = ids[0];
+  for (const id of ids) while (!id.startsWith(p)) p = p.slice(0, -1);
+  const sufLens = new Set(ids.map((id) => id.length - p.length));
+  if (sufLens.size !== 1) return null;        // irregular IDs -> caller uses verbose fallback
+  const n = [...sufLens][0];
+  const g = ids.map((id) => id.slice(p.length) + b36(o[id][0]) + b36(o[id][1])).join("");
+  return { p, n, g };
+}
+
+function unpackSnapshot(p, n, g) {
+  const out = {}, sz = n + 2;
+  for (let i = 0; i + sz <= g.length; i += sz) {
+    out[p + g.slice(i, i + n)] = [parseInt(g[i + n], 36), parseInt(g[i + n + 1], 36)];
+  }
+  return out;
+}
+
+function b64urlEncode(json) {
+  return btoa(unescape(encodeURIComponent(json)))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
 function encodeShare() {
   const o = {};
   if (board) {
@@ -730,17 +761,22 @@ function encodeShare() {
       for (const mt of g.matches)
         if (mt.score) o[mt.id] = mt.score;   // every result on screen, frozen as final
   }
-  const payload = { o, f: 1, k: state.ko_overrides, t: state.team || undefined };
-  const json = JSON.stringify(payload);
-  return btoa(unescape(encodeURIComponent(json)))
-    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const packed = packSnapshot(o);
+  const payload = packed
+    ? { v: 2, p: packed.p, n: packed.n, g: packed.g, k: state.ko_overrides, t: state.team || undefined }
+    : { o, f: 1, k: state.ko_overrides, t: state.team || undefined };  // verbose fallback
+  return b64urlEncode(JSON.stringify(payload));
 }
 function decodeShare(token) {
   try {
     const b64 = token.replace(/-/g, "+").replace(/_/g, "/");
     const json = decodeURIComponent(escape(atob(b64)));
     const p = JSON.parse(json);
-    if (p.f) {  // frozen link: o is the full group snapshot (the base), not a set of edits.
+    if (p.v === 2) {  // compact frozen snapshot
+      return { overrides: {}, ko_overrides: p.k || {}, team: p.t || null,
+               snapshot: unpackSnapshot(p.p || "", p.n || 0, p.g || "") };
+    }
+    if (p.f) {  // v1 frozen link: o is the full group snapshot (the base), not a set of edits.
       return { overrides: {}, ko_overrides: p.k || {}, team: p.t || null, snapshot: p.o || {} };
     }
     const overrides = {};   // legacy link: edits layered on the live base

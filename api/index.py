@@ -57,11 +57,21 @@ def _state():
 
 
 # ---- shared-bracket token (mirror of web/app.js encodeShare) --------------------
+def _unpack_snapshot(payload):
+    """Reconstruct the {match_id: [h, a]} snapshot from a compact v2 token (mirror of the JS
+    packer): id = prefix `p` + an `n`-char suffix; each game is suffix + two base-36 scores."""
+    p, n, g = payload.get("p", ""), int(payload.get("n", 0)), payload.get("g", "")
+    out, sz = {}, n + 2
+    for i in range(0, len(g) - sz + 1, sz):
+        out[p + g[i:i + n]] = [int(g[i + n], 36), int(g[i + n + 1], 36)]
+    return out
+
+
 def _decode_share(token):
     """token -> (overrides, ko_overrides, team, snapshot). Empty/garbage decodes to no picks.
 
-    A frozen link (`f`) carries the full group-result snapshot in `o`, so it reproduces the
-    exact bracket that was shared; a legacy link's `o` is a set of edits over the live base."""
+    A frozen link reproduces the exact shared bracket from a group snapshot — compactly packed
+    (v2) or, for older links, the full `o` map. A legacy link's `o` is edits over the live base."""
     if not token:
         return {}, {}, None, None
     try:
@@ -70,8 +80,10 @@ def _decode_share(token):
         payload = json.loads(base64.b64decode(b64).decode("utf-8"))
         o = payload.get("o") or {}
         ko, team = payload.get("k") or {}, payload.get("t")
+        if payload.get("v") == 2:
+            return {}, ko, team, _unpack_snapshot(payload)
         if payload.get("f"):
-            return {}, ko, team, o          # frozen: o is the snapshot, not edits
+            return {}, ko, team, o          # v1 frozen: o is the snapshot, not edits
         return {k: {"score": v} for k, v in o.items()}, ko, team, None
     except Exception:  # noqa: BLE001
         return {}, {}, None, None
