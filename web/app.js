@@ -53,6 +53,10 @@ function route() {
   PAGES.forEach((p) => $(`#page-${p}`).classList.toggle("active", p === page));
   document.querySelectorAll("nav.tabs a").forEach((a) =>
     a.classList.toggle("on", a.dataset.page === page));
+  // Run-probabilities and Save-image only act on the bracket; Share + Reset stay global.
+  const bracketOnly = page === "bracket";
+  $("#btn-mc").classList.toggle("hidden", !bracketOnly);
+  $("#btn-image").classList.toggle("hidden", !bracketOnly);
   if (page === "bracket") {
     requestAnimationFrame(drawConnectors); // sizes are only real when visible
     maybeAutoProbabilities();
