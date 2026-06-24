@@ -34,7 +34,9 @@ def load_teams() -> dict[str, Team]:
     }
 
 
-def _http_json(url: str, timeout: float = 8.0) -> dict:
+# Kept short: on a cold serverless container the first request blocks on this fetch, so a
+# slow/unreachable ESPN must fail fast to the bundled seed rather than hang a visitor.
+def _http_json(url: str, timeout: float = 4.0) -> dict:
     req = urllib.request.Request(url, headers={"User-Agent": "wc-bracket-sim/1.0"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.loads(r.read().decode())
