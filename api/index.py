@@ -36,6 +36,11 @@ INDEX_HTML = version_html((ROOT / "web" / "index.html").read_text())
 
 _TEAMS = None
 _BASE = None
+# Memoized default-view Monte Carlo, keyed by run count. The unedited bracket auto-fires an
+# identical simulation for every cold visitor, so under a traffic spike this serves it from a
+# warm container instead of re-running the same 5k-sim tournament thousands of times. Valid for
+# the container's lifetime because _BASE is fetched once and never mutated.
+_MC_CACHE: dict = {}
 
 
 def _state():
@@ -150,8 +155,14 @@ def _route(method, path, body):
         return 200, build_board(teams, base, overrides, ko)
     if method == "POST" and path == "/api/montecarlo":
         runs = max(500, min(int(body.get("runs", 5000)), 20000))
+        default_view = not overrides and not ko
+        if default_view and runs in _MC_CACHE:
+            return 200, _MC_CACHE[runs]
         t = Tournament(teams, apply_group_overrides(base, overrides))
-        return 200, t.monte_carlo(runs=runs, seed=1, ko_overrides=ko)
+        result = t.monte_carlo(runs=runs, seed=1, ko_overrides=ko)
+        if default_view:
+            _MC_CACHE[runs] = result
+        return 200, result
     if method == "POST" and path == "/api/team":
         team = body.get("team")
         if team not in teams:

@@ -509,19 +509,22 @@
     "home": "Norway",
     "away": "Senegal",
     "score": [
-      1,
-      0
+      3,
+      2
     ],
-    "status": "in_progress",
-    "minute": 48
+    "status": "final",
+    "minute": null
   },
   {
     "id": "760455",
     "group": "J",
     "home": "Jordan",
     "away": "Algeria",
-    "score": null,
-    "status": "scheduled",
+    "score": [
+      1,
+      2
+    ],
+    "status": "final",
     "minute": null
   },
   {
@@ -529,8 +532,11 @@
     "group": "K",
     "home": "Portugal",
     "away": "Uzbekistan",
-    "score": null,
-    "status": "scheduled",
+    "score": [
+      5,
+      0
+    ],
+    "status": "final",
     "minute": null
   },
   {
@@ -538,8 +544,11 @@
     "group": "L",
     "home": "England",
     "away": "Ghana",
-    "score": null,
-    "status": "scheduled",
+    "score": [
+      0,
+      0
+    ],
+    "status": "final",
     "minute": null
   },
   {
@@ -547,8 +556,11 @@
     "group": "L",
     "home": "Panama",
     "away": "Croatia",
-    "score": null,
-    "status": "scheduled",
+    "score": [
+      0,
+      1
+    ],
+    "status": "final",
     "minute": null
   },
   {
@@ -556,8 +568,11 @@
     "group": "K",
     "home": "Colombia",
     "away": "Congo DR",
-    "score": null,
-    "status": "scheduled",
+    "score": [
+      1,
+      0
+    ],
+    "status": "final",
     "minute": null
   },
   {

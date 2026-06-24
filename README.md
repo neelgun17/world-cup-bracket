@@ -48,7 +48,7 @@ ESPN live scores ─► group tables (2026 tiebreakers) ─► 8 best thirds ─
                                                                               │
    Elo + Dixon–Coles Poisson model ◄── fills undecided games ──► full R32…Final bracket
                                                                               │
-                              Monte Carlo (10k runs) ─► advancement probabilities
+                              Monte Carlo (5k runs) ─► advancement probabilities
 ```
 
 ### The 2026 rules (encoded exactly — see `wc_sim/rules/standings.py`)
