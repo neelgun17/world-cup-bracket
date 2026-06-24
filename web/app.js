@@ -752,8 +752,10 @@ function decodeShare(token) {
 }
 
 // On load: if the URL carries ?s=…, that shared bracket wins over whatever is in
-// localStorage. Then strip the token (keeping the route hash) so later edits aren't
-// clobbered by a stale link on the next reload.
+// localStorage. Then strip the token so later edits aren't clobbered by a stale link on the
+// next reload. A shared link is about the bracket, so land there by default — respect an
+// explicit page in the hash, but if the sharing app dropped the #fragment (common when a
+// query string is present) don't silently fall back to Standings.
 function hydrateFromUrl() {
   const m = location.search.match(/[?&]s=([^&]+)/);
   if (!m) return;
@@ -764,7 +766,9 @@ function hydrateFromUrl() {
   state.team = shared.team;
   state.snapshot = shared.snapshot;   // frozen base (or null for a legacy live link)
   saveState();
-  history.replaceState(null, "", location.pathname + (location.hash || ""));
+  const hashPage = location.hash.replace(/^#\//, "");
+  const targetHash = PAGES.includes(hashPage) ? location.hash : "#/bracket";
+  history.replaceState(null, "", location.pathname + targetHash);
 }
 
 async function shareLink() {
