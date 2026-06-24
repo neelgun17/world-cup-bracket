@@ -14,6 +14,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from .api import apply_group_overrides, build_board, build_team_report
+from .assets import version_html
 from .engine import Tournament
 from .ingest import cache_state, fetch_group_matches, load_cached, load_teams
 
@@ -56,7 +57,8 @@ class Handler(BaseHTTPRequestHandler):
         # (the browser keeps the token; the server just needs to hand back index.html).
         path = self.path.split("?", 1)[0]
         if path in ("/", "/index.html"):
-            return self._static("index.html")
+            # Version the asset URLs so an updated app.js/style.css isn't served from cache.
+            return self._send(200, version_html((WEB / "index.html").read_text()), "text/html")
         if path.startswith("/static/"):
             return self._static(path[len("/static/"):])
         if path == "/api/board":

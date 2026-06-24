@@ -96,13 +96,18 @@ def build_board(teams: dict[str, Team], base_matches: list[Match],
     for no in sorted(res.knockout):
         m = res.knockout[no]
         eh = t.elo.get(m.home); ea = t.elo.get(m.away)
-        p_home = model.win_probs(eh, ea)[0] if eh and ea else None
+        probs = model.win_probs(eh, ea) if eh and ea else None
+        p_home = probs[0] if probs else None
+        # The team the model itself would send through this matchup (Elo favorite, ignoring any
+        # pick). The UI uses it so a pick that just agrees with the model isn't flagged as one.
+        fav = (m.home if probs[0] >= probs[2] else m.away) if probs else None
         node = {
             "match_no": no, "stage": m.stage, "home": m.home, "away": m.away,
             "abbr_home": teams.get(m.home, _ph(m.home)).abbr,
             "abbr_away": teams.get(m.away, _ph(m.away)).abbr,
             "score": list(m.score) if m.score else None,
             "winner": m.winner(), "p_home": round(p_home, 3) if p_home is not None else None,
+            "fav": fav,
             "picked": no in ko_overrides,
         }
         if no in third_source:

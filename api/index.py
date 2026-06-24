@@ -25,12 +25,14 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from wc_sim.api import apply_group_overrides, build_board, build_team_report
+from wc_sim.assets import version_html
 from wc_sim.engine import Tournament
 from wc_sim.ingest import fetch_group_matches, load_cached, load_teams
 
 ROOT = Path(__file__).resolve().parent.parent
 SEED = ROOT / "wc_sim" / "data" / "state_seed.json"
-INDEX_HTML = (ROOT / "web" / "index.html").read_text()
+# Stamp a content hash onto the JS/CSS URLs so a deploy that changes them busts the cache.
+INDEX_HTML = version_html((ROOT / "web" / "index.html").read_text())
 
 _TEAMS = None
 _BASE = None

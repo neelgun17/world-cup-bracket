@@ -335,9 +335,11 @@ function renderSlot(n, side, label) {
 
   const score = n.score ? n.score[side === "home" ? 0 : 1] : "";
   const isWinner = !gold && n.winner === team;
-  // A manually-picked team is the winner you clicked through — flag it even on a gold
-  // (coin-flip) slot, so a pick is never mistaken for the model's own projection.
-  const isPicked = n.picked && n.winner === team;
+  // A pick only "counts" as one when it overrides the model — i.e. the team you sent through
+  // isn't the one the model itself favours (n.fav). Picking the model's own choice doesn't
+  // earn a badge, and clicking it clears the pick entirely (see the click handler below).
+  // Flagged even on a gold (coin-flip) slot so a real override is never read as a projection.
+  const isPicked = n.picked && n.winner === team && n.winner !== n.fav;
   const slot = el("div", "slot" + (isWinner ? " winner" : "") + (isPicked ? " picked" : "") + (gold ? " marginal" : ""));
 
   let why = isThirdAway ? n.third_slot.why : null;
@@ -355,7 +357,11 @@ function renderSlot(n, side, label) {
   }
   slot.addEventListener("click", (e) => {
     if (e.target.classList.contains("info")) return;
-    state.ko_overrides[n.match_no] = detTeam;
+    // Clicking the team the model already favours reverts this match to the model (clears any
+    // pick); clicking the other side records a real override. So "going back" to the model's
+    // own choice leaves no leftover pick.
+    if (detTeam === n.fav) delete state.ko_overrides[n.match_no];
+    else state.ko_overrides[n.match_no] = detTeam;
     saveState();
     fetchBoard();
     scheduleMcRerun();   // refresh the conditioned probabilities to reflect this pick
