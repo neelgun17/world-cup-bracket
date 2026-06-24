@@ -99,6 +99,9 @@ tr.win, tr.runner { background: rgba(63,185,80,.05); }
 .thirds { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; max-width: 460px; }
 .thirds h3 { margin: 2px 0 4px; font-size: 13px; }
 .thirds .combo { color: var(--dim); font-size: 11px; margin-bottom: 8px; }
+.thirds-note { color: var(--dim); font-size: 11.5px; line-height: 1.5; margin: 0 0 12px;
+  padding: 9px 11px; background: var(--panel2); border-radius: 8px; }
+.thirds-note b { color: var(--txt); font-weight: 600; }
 .trow { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 5px; font-size: 12.5px; }
 .trow .grp { color: var(--dim); font-size: 11px; }
 .trow.in { background: rgba(227,179,65,.12); }

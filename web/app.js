@@ -269,7 +269,14 @@ function onScoreEdit(e) {
 function renderThirds() {
   const root = $("#thirds");
   root.innerHTML = `<h3>Third-place race</h3>
-    <div class="combo">Best 8 of 12 advance · combination <b>${board.assignment.combination_key}</b></div>`;
+    <div class="combo">Best 8 of 12 advance · combination <b>${board.assignment.combination_key}</b></div>
+    <p class="thirds-note">New in 2026: each group's 3rd-placed team enters this cross-group table,
+      and the top <b>8 of 12</b> join the 12 group winners and 12 runners-up to complete the
+      32-team knockout. They're ranked by points, then goal difference, then goals scored, then
+      fair-play record — never head-to-head, since teams in different groups never met. Which
+      Round-of-32 match each qualifier is slotted into is then fixed by FIFA's 495-combination
+      table from the <b>combination</b> above (the eight groups that sent a third through) — see
+      the ⓘ on each third-place slot in the bracket.</p>`;
   board.third_race.forEach((t, i) => {
     if (i === board.cut_index) root.appendChild(el("div", "cutline", "— top 8 cut —"));
     const row = el("div", "trow " + (t.qualified ? "in" : "outq"));
