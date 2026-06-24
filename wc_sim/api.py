@@ -36,6 +36,24 @@ def apply_group_overrides(base: list[Match], overrides: dict) -> list[Match]:
     return out
 
 
+def apply_snapshot(base: list[Match], snapshot: dict | None) -> list[Match]:
+    """Freeze a shared bracket onto a fresh base. `snapshot` ({match_id: [h, a]}) holds the
+    group results as they stood when the link was created — treated as final. EVERY other group
+    game is forced back to unplayed, so the deterministic projection reproduces the exact bracket
+    that was shared even after newer real results have come in (a "static" link). `base` is left
+    untouched; returns a new list. No snapshot -> base returned as-is (live mode)."""
+    if not snapshot:
+        return base
+    snap = {k: (int(v[0]), int(v[1])) for k, v in snapshot.items()}
+    out = []
+    for m in base:
+        frozen = snap.get(m.id)
+        out.append(Match(
+            id=m.id, stage=GROUP, group=m.group, home=m.home, away=m.away,
+            score=frozen, status="final" if frozen is not None else "scheduled", minute=None))
+    return out
+
+
 def _table_rows(recs, third_qual_teams: set[str]) -> list[dict]:
     rows = []
     for i, r in enumerate(recs, 1):

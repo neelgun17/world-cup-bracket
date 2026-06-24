@@ -24,7 +24,7 @@ from pathlib import Path
 # `import wc_sim` resolves inside the lambda bundle.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from wc_sim.api import apply_group_overrides, build_board, build_team_report
+from wc_sim.api import apply_group_overrides, apply_snapshot, build_board, build_team_report
 from wc_sim.assets import version_html
 from wc_sim.engine import Tournament
 from wc_sim.ingest import fetch_group_matches, load_cached, load_teams
@@ -58,23 +58,29 @@ def _state():
 
 # ---- shared-bracket token (mirror of web/app.js encodeShare) --------------------
 def _decode_share(token):
-    """token -> (overrides, ko_overrides, team). Empty/garbage decodes to no picks."""
+    """token -> (overrides, ko_overrides, team, snapshot). Empty/garbage decodes to no picks.
+
+    A frozen link (`f`) carries the full group-result snapshot in `o`, so it reproduces the
+    exact bracket that was shared; a legacy link's `o` is a set of edits over the live base."""
     if not token:
-        return {}, {}, None
+        return {}, {}, None, None
     try:
         b64 = token.replace("-", "+").replace("_", "/")
         b64 += "=" * (-len(b64) % 4)
         payload = json.loads(base64.b64decode(b64).decode("utf-8"))
-        overrides = {k: {"score": v} for k, v in (payload.get("o") or {}).items()}
-        return overrides, (payload.get("k") or {}), payload.get("t")
+        o = payload.get("o") or {}
+        ko, team = payload.get("k") or {}, payload.get("t")
+        if payload.get("f"):
+            return {}, ko, team, o          # frozen: o is the snapshot, not edits
+        return {k: {"score": v} for k, v in o.items()}, ko, team, None
     except Exception:  # noqa: BLE001
-        return {}, {}, None
+        return {}, {}, None, None
 
 
 def _board_for(token):
     teams, base = _state()
-    overrides, ko, _team = _decode_share(token)
-    return build_board(teams, base, overrides, ko)
+    overrides, ko, _team, snapshot = _decode_share(token)
+    return build_board(teams, apply_snapshot(base, snapshot), overrides, ko)
 
 
 # ---- Open Graph -----------------------------------------------------------------
@@ -150,12 +156,15 @@ def _route(method, path, body):
     teams, base = _state()
     overrides = body.get("overrides", {})
     ko = body.get("ko_overrides", {})
+    # A frozen share link sends its group snapshot; rebuild the base from it (live mode: no-op).
+    base = apply_snapshot(base, body.get("snapshot"))
 
     if path == "/api/board":
         return 200, build_board(teams, base, overrides, ko)
     if method == "POST" and path == "/api/montecarlo":
         runs = max(500, min(int(body.get("runs", 5000)), 20000))
-        default_view = not overrides and not ko
+        # Only the unedited LIVE view is memoizable; a snapshot makes the base link-specific.
+        default_view = not overrides and not ko and not body.get("snapshot")
         if default_view and runs in _MC_CACHE:
             return 200, _MC_CACHE[runs]
         t = Tournament(teams, apply_group_overrides(base, overrides))

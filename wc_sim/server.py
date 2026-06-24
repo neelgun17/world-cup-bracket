@@ -13,7 +13,7 @@ import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from .api import apply_group_overrides, build_board, build_team_report
+from .api import apply_group_overrides, apply_snapshot, build_board, build_team_report
 from .assets import version_html
 from .engine import Tournament
 from .ingest import cache_state, fetch_group_matches, load_cached, load_teams
@@ -92,17 +92,19 @@ class Handler(BaseHTTPRequestHandler):
     def _route(self, body):
         overrides = body.get("overrides", {})
         ko = body.get("ko_overrides", {})
+        # A frozen share link sends its group snapshot; rebuild the base from it (live: no-op).
+        base = apply_snapshot(BASE, body.get("snapshot"))
         if self.path == "/api/board":
-            return 200, build_board(TEAMS, BASE, overrides, ko)
+            return 200, build_board(TEAMS, base, overrides, ko)
         if self.path == "/api/montecarlo":
-            matches = apply_group_overrides(BASE, overrides)
+            matches = apply_group_overrides(base, overrides)
             t = Tournament(TEAMS, matches)
             return 200, t.monte_carlo(runs=self._runs(body, 5000), seed=1, ko_overrides=ko)
         if self.path == "/api/team":
             team = body.get("team")
             if team not in TEAMS:
                 return 400, {"error": "unknown team"}
-            return 200, build_team_report(TEAMS, BASE, team, overrides, self._runs(body, 6000))
+            return 200, build_team_report(TEAMS, base, team, overrides, self._runs(body, 6000))
         return 404, {"error": "not found"}
 
 

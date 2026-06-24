@@ -33,9 +33,12 @@ const el = (tag, cls, html) => {
 function loadState() {
   try {
     const s = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
-    return { overrides: s.overrides || {}, ko_overrides: s.ko_overrides || {}, team: s.team || null };
+    // `snapshot` (set only by opening a frozen share link) pins the group results so the
+    // bracket stays static; null = live mode. `overrides` are edits layered on whichever base.
+    return { overrides: s.overrides || {}, ko_overrides: s.ko_overrides || {},
+             team: s.team || null, snapshot: s.snapshot || null };
   } catch (_) {
-    return { overrides: {}, ko_overrides: {}, team: null };
+    return { overrides: {}, ko_overrides: {}, team: null, snapshot: null };
   }
 }
 function saveState() {
@@ -84,7 +87,8 @@ async function fetchBoard() {
   try {
     const r = await fetch("/api/board", {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ overrides: state.overrides, ko_overrides: state.ko_overrides }),
+      body: JSON.stringify({ overrides: state.overrides, ko_overrides: state.ko_overrides,
+                             snapshot: state.snapshot }),
     });
     if (!r.ok) throw new Error(`server returned ${r.status}`);
     board = await r.json();
@@ -449,7 +453,8 @@ async function fetchTeam() {
   try {
     const r = await fetch("/api/team", {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ team: want, overrides: state.overrides, runs: 6000 }),
+      body: JSON.stringify({ team: want, overrides: state.overrides,
+                             snapshot: state.snapshot, runs: 6000 }),
     });
     if (myReq !== teamReq) return;     // superseded mid-flight; let the latest request own the UI
     if (!r.ok) throw new Error(`server returned ${r.status}`);
@@ -650,7 +655,8 @@ async function loadProbabilities(showPanel) {
     const r = await fetch("/api/montecarlo", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        overrides: state.overrides, ko_overrides: state.ko_overrides, runs: 5000,
+        overrides: state.overrides, ko_overrides: state.ko_overrides,
+        snapshot: state.snapshot, runs: 5000,
       }),
     });
     if (!r.ok) throw new Error(`server returned ${r.status}`);
@@ -687,14 +693,18 @@ async function loadProbabilities(showPanel) {
 // A bracket is only viral if it travels. Picks live in the URL (so a link reproduces
 // the exact what-if), and the bracket can be exported as a clean PNG for group chats.
 
-// Pack the pick/edit state into a compact base64url token: o = {matchId:[h,a]} score
-// edits, k = knockout picks {matchNo:team}, t = the chosen "My Team".
+// A shared link is a STATIC snapshot: it freezes every group result currently shown (live +
+// your edits) so the bracket reproduces exactly, even after newer real results land. Packed
+// into a base64url token: f = frozen flag, o = {matchId:[h,a]} the full group snapshot,
+// k = knockout picks {matchNo:team}, t = the chosen "My Team".
 function encodeShare() {
   const o = {};
-  for (const [id, ov] of Object.entries(state.overrides)) {
-    if (ov && ov.score) o[id] = ov.score;
+  if (board) {
+    for (const g of board.groups)
+      for (const mt of g.matches)
+        if (mt.score) o[mt.id] = mt.score;   // every result on screen, frozen as final
   }
-  const payload = { o, k: state.ko_overrides, t: state.team || undefined };
+  const payload = { o, f: 1, k: state.ko_overrides, t: state.team || undefined };
   const json = JSON.stringify(payload);
   return btoa(unescape(encodeURIComponent(json)))
     .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -704,9 +714,12 @@ function decodeShare(token) {
     const b64 = token.replace(/-/g, "+").replace(/_/g, "/");
     const json = decodeURIComponent(escape(atob(b64)));
     const p = JSON.parse(json);
-    const overrides = {};
+    if (p.f) {  // frozen link: o is the full group snapshot (the base), not a set of edits.
+      return { overrides: {}, ko_overrides: p.k || {}, team: p.t || null, snapshot: p.o || {} };
+    }
+    const overrides = {};   // legacy link: edits layered on the live base
     for (const [id, sc] of Object.entries(p.o || {})) overrides[id] = { score: sc };
-    return { overrides, ko_overrides: p.k || {}, team: p.t || null };
+    return { overrides, ko_overrides: p.k || {}, team: p.t || null, snapshot: null };
   } catch (_) {
     return null;
   }
@@ -723,6 +736,7 @@ function hydrateFromUrl() {
   state.overrides = shared.overrides;
   state.ko_overrides = shared.ko_overrides;
   state.team = shared.team;
+  state.snapshot = shared.snapshot;   // frozen base (or null for a legacy live link)
   saveState();
   history.replaceState(null, "", location.pathname + (location.hash || ""));
 }
@@ -900,7 +914,8 @@ $("#btn-mc").addEventListener("click", () => loadProbabilities(true));
 $("#btn-share").addEventListener("click", shareLink);
 $("#btn-image").addEventListener("click", saveImage);
 $("#btn-reset").addEventListener("click", () => {
-  state.overrides = {}; state.ko_overrides = {};
+  // Reset returns to the live tournament: drop edits, picks, and any frozen-link snapshot.
+  state.overrides = {}; state.ko_overrides = {}; state.snapshot = null;
   mcByTeam = null; mcSlots = null; teamReport = null;
   saveState();
   fetchBoard();
